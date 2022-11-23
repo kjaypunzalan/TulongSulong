@@ -30,6 +30,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //hide action bar
+        getSupportActionBar().hide();
+
         etLogEmail = findViewById(R.id.etLogEmail);
         etLogPassword = findViewById(R.id.etLogPassword);
         tvRegister = findViewById(R.id.tvSignup);

@@ -3,11 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.231" />
+        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/drawable-v24/yellow_round_hollow.xml" value="0.231" />
+        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/drawable-v24/yellow_round_solid.xml" value="0.231" />
         <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/drawable/ic_background.xml" value="0.231" />
-        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/activity_login.xml" value="0.22826086956521738" />
-        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
-        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/activity_register.xml" value="0.22826086956521738" />
-        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/activity_splash_screen.xml" value="0.4" />
+        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/drawable/ic_launcher_background.xml" value="0.231" />
+        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/activity_login.xml" value="0.264" />
+        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/activity_main.xml" value="0.8" />
+        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/activity_register.xml" value="0.2" />
+        <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/activity_splash_screen.xml" value="0.2" />
         <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/content_splash_screen.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/fragment_first.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/Karl John Punzalan/AndroidStudioProjects/TulongSulong/TulongSulong/app/src/main/res/layout/fragment_second.xml" value="0.22826086956521738" />
