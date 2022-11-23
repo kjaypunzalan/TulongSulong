@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     Button btnLogout;
+    ImageView ivLogoutIcon;
     FirebaseAuth mAuth;
 
     @Override
@@ -20,7 +22,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //hide action bar
+        getSupportActionBar().hide();
+
         btnLogout = findViewById(R.id.btnLogout);
+        //bring logout icon to front
+        ivLogoutIcon = findViewById(R.id.iv_logouticon);
+        ivLogoutIcon.setZ(100);
+
+
         mAuth = FirebaseAuth.getInstance();
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -31,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
     }
 
     @Override
