@@ -26,9 +26,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         btnLogout = findViewById(R.id.btnLogout);
+
         //bring logout icon to front
         ivLogoutIcon = findViewById(R.id.iv_logouticon);
-        ivLogoutIcon.setZ(100);
+        bringToFront(ivLogoutIcon);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -43,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    protected void bringToFront(ImageView icon) {
+        icon.setZ(100);
     }
 
     @Override
