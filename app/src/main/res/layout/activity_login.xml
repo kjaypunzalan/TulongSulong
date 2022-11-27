@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_bg_icons"
-    tools:context=".LoginActivity">
+    tools:context=".activities.LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:hint="Email"
-        android:background="@drawable/rounded_button_solid"
+        android:background="@drawable/rectangle_button_hollow"
         android:inputType="textEmailAddress"
         android:textColor="@color/dark"
         android:textColorHint="@color/gray"
@@ -67,7 +67,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter name:"
+        android:text="Enter email:"
         android:textColor="@color/dark"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -83,7 +83,7 @@
         android:layout_height="46dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:background="@drawable/rounded_button_solid"
+        android:background="@drawable/rectangle_button_hollow"
         android:hint="Password"
         android:inputType="textPassword"
         android:textColor="@color/dark"
