@@ -1,4 +1,4 @@
-package com.iacademy.tulongsulong;
+package com.iacademy.tulongsulong.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,12 +17,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.iacademy.tulongsulong.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    TextView tvLogin;
-    EditText etRegEmail, etRegPassword;
-    Button btnRegister;
+    //declare variables
+    private TextView tvLogin;
+    private EditText etRegEmail, etRegPassword;
+    private Button btnRegister;
 
     FirebaseAuth mAuth;
 
@@ -34,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
         //hide action bar
         getSupportActionBar().hide();
 
+        //instantiate variables
         etRegEmail = findViewById(R.id.etRegEmail);
         etRegPassword = findViewById(R.id.etRegPassword);
         tvLogin = findViewById(R.id.tvLogin);
