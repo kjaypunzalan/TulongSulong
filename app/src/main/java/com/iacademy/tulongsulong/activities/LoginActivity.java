@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etLogEmail, etLogPassword;
     private Button btnLogin;
 
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

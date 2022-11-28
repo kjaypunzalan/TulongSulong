@@ -13,6 +13,34 @@
     <!-- PHONE NUMBER -->
 
     <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/btn_editCamera"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_button_solid"
+        android:backgroundTint="@color/primary"
+        android:src="@drawable/button_camera"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_editGallery"
+        app:layout_constraintHorizontal_bias="0.942"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_editAvatar"
+        app:layout_constraintVertical_bias="0.018" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/btn_editGallery"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_button_solid"
+        android:backgroundTint="@color/primary"
+        android:src="@drawable/button_gallery"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.58"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_editAvatar"
+        app:layout_constraintVertical_bias="0.015" />
+
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/btn_return"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -26,7 +54,7 @@
         app:layout_constraintVertical_bias="0.034" />
 
     <ImageView
-        android:id="@+id/iv_avatar"
+        android:id="@+id/iv_editAvatar"
         android:layout_width="113dp"
         android:layout_height="106dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,32 +65,27 @@
         app:layout_constraintVertical_bias="0.036"
         app:srcCompat="@drawable/avatar_solid" />
 
-    <Button
-        android:id="@+id/btn_upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/primary"
-        android:text="Upload Image"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.243" />
-
     <TextView
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter name:"
         android:textColor="@color/dark"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/et_addName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintHorizontal_bias="0.121"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.37" />
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <!-- EMAIL ADDRESS -->
+
+
+    <!-- BUTTON -->
+
+    <!-- FOOTER -->
 
     <EditText
         android:id="@+id/et_addName"
@@ -72,27 +95,26 @@
         android:inputType="text"
         android:textColor="@color/dark"
         android:textColorHint="@color/gray"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.432" />
+        app:layout_constraintVertical_bias="0.955" />
 
     <TextView
+        android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter phone number:"
         android:textColor="@color/dark"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/et_addNumber"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.166"
+        app:layout_constraintHorizontal_bias="0.167"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.534" />
+        app:layout_constraintVertical_bias="1.0" />
 
-
-    <!-- EMAIL ADDRESS -->
     <EditText
         android:id="@+id/et_addNumber"
         android:layout_width="290dp"
@@ -101,29 +123,25 @@
         android:inputType="phone"
         android:textColor="@color/dark"
         android:textColorHint="@color/gray"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.603" />
-
-
-    <!-- BUTTON -->
-
-    <!-- FOOTER -->
+        app:layout_constraintVertical_bias="0.951" />
 
     <TextView
+        android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter email address:"
         android:textColor="@color/dark"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/et_addEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.165"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.699" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/et_addEmail"
@@ -135,10 +153,9 @@
         android:textColorHint="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.775" />
+        app:layout_constraintVertical_bias="0.757" />
 
     <Button
         android:id="@+id/btn_createContact"
@@ -147,14 +164,15 @@
         android:backgroundTint="@color/primary"
         android:text="Add Contact"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.906" />
+        app:layout_constraintTop_toBottomOf="@+id/et_addEmail"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
+        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="© TulongSulong"

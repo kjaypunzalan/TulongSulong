@@ -1,13 +1,17 @@
 package com.iacademy.tulongsulong.adapters;
+import com.bumptech.glide.Glide;
 import com.iacademy.tulongsulong.models.ContactsModel;
 import com.iacademy.tulongsulong.utils.RecyclerOnItemClickListener;
 import com.iacademy.tulongsulong.R;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +51,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         holder.tvName.setText(listModels.get(position).getName());
         holder.tvNumber.setText(listModels.get(position).getNumber());
         holder.tvEmail.setText(listModels.get(position).getEmail());
+        Picasso.get().load(listModels.get(position).getImageURL()).into(holder.ivContactImage);
     }
 
     //returns how many items on the list
@@ -62,6 +67,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         public TextView tvName;
         public TextView tvNumber;
         public TextView tvEmail;
+        public ImageView ivContactImage;
 
         //instantiate variable
         public ViewHolder(@NonNull View itemView) {
@@ -70,6 +76,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             tvName = itemView.findViewById(R.id.tv_name);
             tvNumber = itemView.findViewById(R.id.tv_num);
             tvEmail = itemView.findViewById(R.id.tv_email);
+            ivContactImage = itemView.findViewById(R.id.iv_contactImage);
 
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -78,6 +85,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                         mItemClickListener.onItemClick(v, getAdapterPosition());
                     }
                 }
+
             });
         }
     }
