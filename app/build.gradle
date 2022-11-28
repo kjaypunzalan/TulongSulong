@@ -26,12 +26,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    dataBinding{
+        enabled=true
+    }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
     //FIREBASE
     implementation 'com.google.firebase:firebase-database:20.1.0'
     implementation 'com.google.firebase:firebase-storage:20.1.0'
@@ -45,6 +50,7 @@ dependencies {
 
     //GIF & PICASSO
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
+    implementation 'com.squareup.picasso:picasso:2.8'
 
     //RETROFIT
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -53,8 +59,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
 
     //GLIDE
-    implementation 'com.github.bumptech.glide:glide:4.13.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 
     //GOOGLE GPS API
     implementation 'com.google.android.gms:play-services-location:21.0.1'

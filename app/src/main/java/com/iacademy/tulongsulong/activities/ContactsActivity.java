@@ -1,19 +1,34 @@
 package com.iacademy.tulongsulong.activities;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.iacademy.tulongsulong.models.ContactsModel;
 import com.iacademy.tulongsulong.adapters.ContactsAdapter;
 import com.iacademy.tulongsulong.utils.RecyclerOnItemClickListener;
 import com.iacademy.tulongsulong.R;
+
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,17 +37,22 @@ import android.widget.Toast;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ContactsActivity extends AppCompatActivity implements RecyclerOnItemClickListener {
 
-    //declare variables
+    //DECLARE VARIABLES
     private static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 1;
+    private ContactsModel contactInfo;
     private RecyclerView rvContactList;
     private ArrayList<ContactsModel> listModels = new ArrayList<>();
+    private ArrayList<String> keys = new ArrayList<>();
+
     private pl.droidsonroids.gif.GifImageView btnHome;
     private Button btnAddContact;
     private Dialog addContactDialog;
@@ -41,13 +61,26 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
     private String email;
     private String number;
 
-    private ImageView ivPhoto;
-    private Button btnUpload, btnCamera, btnGallery;
-    private StorageReference storageRef;
-    private ActivityResultLauncher<Intent> cameraIntentLauncher, galleryIntentLauncher;
+    //ADD CONTACT VARIABLES
+    private EditText etName, etNumber, etEmail;
+    private pl.droidsonroids.gif.GifImageView btnReturn;
     private int PICK_IMAGE = 100;
 
-    FirebaseAuth mAuth;
+    //EDIT CONTACT VARIABLES
+    private EditText et_name, et_number, et_email;
+    private Button btn_edit, btnCreateContact;
+    private pl.droidsonroids.gif.GifImageView btn_delete;
+
+    //FIREBASE VARIABLES
+    private FirebaseAuth mAuth;                     //authorization
+    private DatabaseReference mReference;   //realtime database
+    private StorageReference storageRef;    //storage
+    //IMAGE UPLOAD VARIABLES
+    private ImageView ivAvatar;
+    private pl.droidsonroids.gif.GifImageView btnCamera, btnGallery;
+    private ActivityResultLauncher<Intent> cameraIntentLauncher, galleryIntentLauncher;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,54 +97,109 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
         addContactDialog = new Dialog(this);
         editContactDialog = new Dialog(this);
 
-
-
         //FIREBASE
         mAuth = FirebaseAuth.getInstance();
+        mReference = FirebaseDatabase.getInstance().getReference();
+        storageRef = FirebaseStorage.getInstance().getReference();
 
         //Recycler View logic
-        rvContactList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rvContactList.setAdapter(new ContactsAdapter(listModels, this, this)); //set adaptor that provide child views
+        rvContactList.setLayoutManager(new LinearLayoutManager(ContactsActivity.this, LinearLayoutManager.VERTICAL, false));
+        rvContactList.setAdapter(new ContactsAdapter(listModels, ContactsActivity.this, this)); //set adaptor that provide child views
 
         //call void methods
-        addContactLogic(btnAddContact, btnHome);
+        cameraGallery(); //camera and gallery launchers
+        addContactLogic(btnAddContact, btnHome, mReference);
         initList();
     }
 
-    //ADD CONTACT LOGIC
-    public void addContactLogic(Button btnAddContact, pl.droidsonroids.gif.GifImageView btnHome) {
-        //[Button Logic] Potato Corner
+    /***************************
+     * A. INITIALIZE DATA
+     *------------------------*/
+    private void initList() {
+        //read from file
+        ContactsModel.readFromFile(listModels, keys, rvContactList, getApplicationContext(), mReference, mAuth, this);
+    }
+
+    /**********************************
+     * B. CAMERA AND GALLERY LAUNCHERS
+     *-------------------------------*/
+    public void cameraGallery() {
+        cameraIntentLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if(result.getResultCode() == Activity.RESULT_OK){
+                            Intent data = result.getData();
+                            Bitmap photo = (Bitmap) data.getExtras().get("data");
+                            ivAvatar.setImageBitmap(photo);
+                        }
+                    }
+                });
+        galleryIntentLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if(result.getResultCode() == Activity.RESULT_OK){
+                            try {
+                                Intent data = result.getData();
+                                Uri imageUri = data.getData();
+                                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                                ivAvatar.setImageBitmap(selectedImage);
+
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+    }
+
+    /***************************
+     * C. ADD CONTACT LOGIC
+     *------------------------*/
+    public void addContactLogic(Button btnAddContact,
+                                pl.droidsonroids.gif.GifImageView btnHome,
+                                DatabaseReference mReference) {
+
+        //BUTTON ADD CONTACT
         btnAddContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //DIALOG
                 addContactDialog.setContentView(R.layout.popup_add_contacts);
                 addContactDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 addContactDialog.show();
                 addContactDialog.setCancelable(false);  //back press
                 addContactDialog.setCanceledOnTouchOutside(false); //outside
 
-                EditText etName = (EditText) addContactDialog.findViewById(R.id.et_addName);;
-                EditText etNumber = (EditText) addContactDialog.findViewById(R.id.et_addNumber);
-                EditText etEmail = (EditText) addContactDialog.findViewById(R.id.et_addEmail);
-                Button btnAddContact = (Button) addContactDialog.findViewById(R.id.btn_createContact);
-                pl.droidsonroids.gif.GifImageView btnReturn = (pl.droidsonroids.gif.GifImageView) addContactDialog.findViewById(R.id.btn_return);
+                //ADD CONTACT DIALOG VARIABLES
+                etName = (EditText) addContactDialog.findViewById(R.id.et_addName);;
+                etNumber = (EditText) addContactDialog.findViewById(R.id.et_addNumber);
+                etEmail = (EditText) addContactDialog.findViewById(R.id.et_addEmail);
+                btnCreateContact = (Button) addContactDialog.findViewById(R.id.btn_createContact);
+                btnReturn = (pl.droidsonroids.gif.GifImageView) addContactDialog.findViewById(R.id.btn_return);
 
-                ivPhoto = findViewById(R.id.iv_avatar);
-                btnUpload = findViewById(R.id.btn_upload);
-//                btnCamera = findViewById(R.id.btn_camera);
-//                btnGallery = findViewById(R.id.btn_gallery);
-                storageRef = FirebaseStorage.getInstance().getReference();
+                //UPLOAD AVATAR CONTACT DIALOG VARIABLES
+                ivAvatar = (ImageView) addContactDialog.findViewById(R.id.iv_editAvatar);
+                btnCamera = (pl.droidsonroids.gif.GifImageView) addContactDialog.findViewById(R.id.btn_editCamera);
+                btnGallery = (pl.droidsonroids.gif.GifImageView) addContactDialog.findViewById(R.id.btn_editGallery);
+                //UPLOAD IMAGE
+                ContactsModel.uploadImage(getApplicationContext(), btnCamera, btnGallery, cameraIntentLauncher, galleryIntentLauncher, ContactsActivity.this);
 
+
+                //BUTTON RETURN TO HOME
                 btnReturn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        addContactDialog.dismiss();
                         startActivity(new Intent(ContactsActivity.this, ContactsActivity.class));
                         finish();
                     }
                 });
 
-                //button add contact logic
-                btnAddContact.setOnClickListener(new View.OnClickListener() {
+                //BUTTON CREATE CONTACT LOGIC
+                btnCreateContact.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
@@ -155,8 +243,8 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
                                         Toast.LENGTH_LONG).show();
                             }
                             else {
-                                //write to file
-                                ContactsModel.writeToFile(name, email, number, getApplicationContext());
+                                //WRITE CONTACT TO FILE
+                                ContactsModel.writeToFile(name, email, number, getApplicationContext(), mReference, mAuth, storageRef, ivAvatar);
                                 //show popup
                                 Toast.makeText(getApplicationContext(), "Successfully added new contact.", Toast.LENGTH_SHORT).show();
                             }
@@ -164,9 +252,7 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
                             //close dialog
                             addContactDialog.dismiss();
                             finish();
-                            overridePendingTransition(0, 0);
-                            startActivity(new Intent(ContactsActivity.this, ContactsActivity.class));
-                            overridePendingTransition(0, 0);
+                            startActivity(new Intent(ContactsActivity.this, MainActivity.class));
                         }
                     }
                 });
@@ -184,31 +270,37 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
         });
     }
 
-    private void initList() {
-        //read from file
-        ContactsModel.readFromFile(listModels,getApplicationContext());
-    }
 
-
-    //EDIT CONTACT LOGIC
+    /**********************************
+     * D. EDIT CONTACT LOGIC
+     *-------------------------------*/
     @Override
     public void onItemClick(View childView, int position) {
+
         //call dialog
         editContactDialog.setContentView(R.layout.popup_edit_contacts);
         editContactDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         editContactDialog.show();
-        editContactDialog.setCancelable(false); //back press
+        editContactDialog.setCancelable(false);  //back press
         editContactDialog.setCanceledOnTouchOutside(false); //outside
 
         //declare and instantiate variables
-        EditText et_name = (EditText) editContactDialog.findViewById(R.id.et_detailName);
-        EditText et_number = (EditText) editContactDialog.findViewById(R.id.et_detailNumber);
-        EditText et_email = (EditText) editContactDialog.findViewById(R.id.et_detailEmail);
-        Button btn_edit = (Button) editContactDialog.findViewById(R.id.btn_editContact);
-        pl.droidsonroids.gif.GifImageView btn_delete = (pl.droidsonroids.gif.GifImageView) editContactDialog.findViewById(R.id.btn_delete);
-        pl.droidsonroids.gif.GifImageView btnReturn = (pl.droidsonroids.gif.GifImageView) editContactDialog.findViewById(R.id.btn_return);
+        et_name = (EditText) editContactDialog.findViewById(R.id.et_detailName);
+        et_number = (EditText) editContactDialog.findViewById(R.id.et_detailNumber);
+        et_email = (EditText) editContactDialog.findViewById(R.id.et_detailEmail);
+        btn_edit = (Button) editContactDialog.findViewById(R.id.btn_editContact);
+        btn_delete = (pl.droidsonroids.gif.GifImageView) editContactDialog.findViewById(R.id.btn_delete);
+        btnReturn = (pl.droidsonroids.gif.GifImageView) editContactDialog.findViewById(R.id.btn_return);
+
+        //UPLOAD AVATAR CONTACT DIALOG VARIABLES
+        ivAvatar = (ImageView) editContactDialog.findViewById(R.id.iv_editAvatar);
+        btnCamera = (pl.droidsonroids.gif.GifImageView) editContactDialog.findViewById(R.id.btn_editCamera);
+        btnGallery = (pl.droidsonroids.gif.GifImageView) editContactDialog.findViewById(R.id.btn_editGallery);
+        //UPLOAD IMAGE
+        ContactsModel.uploadImage(getApplicationContext(), btnCamera, btnGallery, cameraIntentLauncher, galleryIntentLauncher, ContactsActivity.this);
 
         //set texts
+        Picasso.get().load(listModels.get(position).getImageURL()).into(ivAvatar);
         et_name.setText(listModels.get(position).getName());
         et_number.setText(listModels.get(position).getNumber());
         et_email.setText(listModels.get(position).getEmail());
@@ -220,6 +312,7 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
         btnReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                editContactDialog.dismiss();
                 startActivity(new Intent(ContactsActivity.this, ContactsActivity.class));
                 finish();
             }
@@ -228,8 +321,10 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContactsModel.deleteFromFile(getApplicationContext(), position);
-                startActivity(new Intent(ContactsActivity.this, ContactsActivity.class));
+                number = et_number.getText().toString();
+                ContactsModel.deleteFromFile(number, getApplicationContext(), mReference, mAuth, storageRef, ivAvatar, position, listModels);
+                editContactDialog.dismiss();
+                startActivity(new Intent(ContactsActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -275,8 +370,9 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
                     Toast.makeText(getApplicationContext(), "Successfully edited contact. Returning to home for refresh.", Toast.LENGTH_SHORT).show();
 
                     //write to file
-                    ContactsModel.editFile(name, email, number, getApplicationContext(), position);
-                    startActivity(new Intent(ContactsActivity.this, ContactsActivity.class));
+                    ContactsModel.editFile(name, email, number, getApplicationContext(), mReference, mAuth, storageRef, ivAvatar, position, listModels);
+                    editContactDialog.dismiss();
+                    startActivity(new Intent(ContactsActivity.this, MainActivity.class));
                     finish();
                 }
             }

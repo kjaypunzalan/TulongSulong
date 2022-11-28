@@ -26,7 +26,7 @@
         app:layout_constraintVertical_bias="0.034" />
 
     <ImageView
-        android:id="@+id/iv_avatar"
+        android:id="@+id/iv_editAvatar"
         android:layout_width="113dp"
         android:layout_height="106dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,20 +36,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.036"
         app:srcCompat="@drawable/avatar" />
-
-    <Button
-        android:id="@+id/btn_upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/primary"
-        android:text="Upload Image"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.243" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -138,6 +124,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.699" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/btn_editCamera"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_button_solid"
+        android:backgroundTint="@color/primary"
+        android:src="@drawable/button_camera"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.409"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.252" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/btn_editGallery"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_button_solid"
+        android:backgroundTint="@color/primary"
+        android:src="@drawable/button_gallery"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.58"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
 
     <EditText
         android:id="@+id/et_detailEmail"

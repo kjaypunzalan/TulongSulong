@@ -31,6 +31,11 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.iacademy.tulongsulong.R;
 import com.iacademy.tulongsulong.models.ContactsModel;
 
@@ -53,16 +58,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_FINE_LOCATION = 99;
     private static final long DEFAULT_UPDATE_INTERVAL = 5000;
     private TextView tvLatitude, tvLongitude, tvAddress;
-    private Switch swUpdates;
     private String realAddress;
-
-
-    LocationCallback locationCallBack; //updating GPS
-    LocationRequest locationRequest; //config file for all settings related to FusedLocationProviderClient
-    FusedLocationProviderClient fusedLocationProviderClient; //Google's API for location services
+    private LocationRequest locationRequest; //config file for all settings related to FusedLocationProviderClient
+    private FusedLocationProviderClient fusedLocationProviderClient; //Google's API for location services
 
     //firebase
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         tvLatitude = findViewById(R.id.tv_lat);
         tvLongitude = findViewById(R.id.tv_lon);
         tvAddress = findViewById(R.id.tv_address);
-        swUpdates = findViewById(R.id.sw_locationupdates);
 
         //instantiate API
         mAuth = FirebaseAuth.getInstance();
@@ -209,12 +209,39 @@ public class MainActivity extends AppCompatActivity {
      * SEND SOS
      *******************/
     public void sendMessage(String realAddress){
-        String message = "I am in DANGER, please send help immediately! I am currently in " + realAddress;
+//        String message = "I am in DANGER, please send help immediately! I am currently in " + realAddress;
+//
+//        String number = "09171103109";
+//
+//        SmsManager sms = SmsManager.getDefault();
+//        sms.sendTextMessage(number, null, message, null, null); //getNumber from contact list
+//        Toast.makeText(this, "SMS sent successfully", Toast.LENGTH_SHORT).show();
 
-        String number = "09171103109";
+        mAuth = FirebaseAuth.getInstance();
+        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
-        SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(number, null, message, null, null); //getNumber from contact list
-        Toast.makeText(this, "SMS sent successfully", Toast.LENGTH_SHORT).show();
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                SmsManager sms = SmsManager.getDefault();
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    //get value
+                    String name = data.child("name").getValue().toString();
+                    String number = data.child("number").getValue().toString();
+
+                    //message the nsend
+                    String message = "HELP ME, " + name + "!! I am in DANGER, please send help immediately! I am currently in " + realAddress;
+
+                    sms.sendTextMessage(number, null, message, null, null); //getNumber from contact list
+                }
+                Toast.makeText(getApplicationContext(), "SMS sent successfully", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Failed to send SMS", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
