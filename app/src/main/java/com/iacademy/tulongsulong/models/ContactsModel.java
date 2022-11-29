@@ -181,8 +181,6 @@ public class ContactsModel {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    //SEND TOAST
-                    Toast.makeText(context, imageRef.getPath(), Toast.LENGTH_SHORT).show();
 
                     imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
@@ -262,9 +260,7 @@ public class ContactsModel {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    //SEND TOAST
-                    Toast.makeText(context, imageRef.getPath(), Toast.LENGTH_SHORT).show();
-
+                    //Toast.makeText(context, imageRef.getPath(), Toast.LENGTH_SHORT).show();
                     imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
