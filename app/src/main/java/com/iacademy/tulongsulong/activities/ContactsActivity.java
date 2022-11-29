@@ -323,7 +323,7 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
             @Override
             public void onClick(View view) {
                 number = et_number.getText().toString();
-                ContactsModel.deleteFromFile(number, getApplicationContext(), mReference, mAuth, storageRef, ivAvatar, position, listModels);
+                ContactsModel.deleteFromFile(number, mReference, mAuth, storageRef, position, listModels);
                 Toast.makeText(getApplicationContext(), "Successfully deleted contact. Please wait for refresh.", Toast.LENGTH_SHORT).show();
                 editContactDialog.dismiss();
                 startActivity(new Intent(ContactsActivity.this, LoadScreenActivity.class));
