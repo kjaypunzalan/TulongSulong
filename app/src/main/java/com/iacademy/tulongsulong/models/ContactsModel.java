@@ -120,14 +120,6 @@ public class ContactsModel {
                 ContactsAdapter contactsAdapter = new ContactsAdapter(listModels, context);
                 contactsAdapter.notifyDataSetChanged();
                 rvList.setAdapter(new ContactsAdapter(listModels, context, item));
-
-//                for(DataSnapshot data : snapshot.getChildren()){
-//                    listModels.add(new ContactsModel(
-//                            data.child("name").getValue().toString(),
-//                            data.child("email").getValue().toString(),
-//                            data.child("number").getValue().toString()));
-//                }
-
             }
 
             @Override
@@ -284,16 +276,13 @@ public class ContactsModel {
      * D. delete from firebase
      *------------------------*/
     public static void deleteFromFile(String number,
-                                      Context context,
                                       DatabaseReference mReference,
                                       FirebaseAuth mAuth,
                                       StorageReference storageRef,
-                                      ImageView ivAvatar,
                                       int position,
                                       ArrayList<ContactsModel> listModels) {
 
         storageRef.child("Users").child(mAuth.getCurrentUser().getUid()).child("image - " + number + ".jpg").delete();
-        mAuth = FirebaseAuth.getInstance();
         mReference.child("Users").child(mAuth.getCurrentUser().getUid()).child(listModels.get(position).getKey()).removeValue();
     }
 

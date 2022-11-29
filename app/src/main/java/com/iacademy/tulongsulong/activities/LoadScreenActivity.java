@@ -25,6 +25,6 @@ public class LoadScreenActivity extends AppCompatActivity {
                 startActivity(new Intent(LoadScreenActivity.this, ContactsActivity.class));
                 finish();
             }
-        }, 5000);
+        }, 3000);
     }
 }

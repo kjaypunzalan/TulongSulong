@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     //firebase
     private FirebaseAuth mAuth;
+    private DatabaseReference mReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +83,11 @@ public class MainActivity extends AppCompatActivity {
         tvLongitude = findViewById(R.id.tv_lon);
         tvAddress = findViewById(R.id.tv_address);
 
-        //instantiate API
+        //FIREBASE
         mAuth = FirebaseAuth.getInstance();
+        mReference = FirebaseDatabase.getInstance().getReference();
+
+        //instantiate API
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, DEFAULT_UPDATE_INTERVAL).build();
 
         //bring logout icon to front
@@ -183,10 +187,9 @@ public class MainActivity extends AppCompatActivity {
                                 if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS)
                                         == PackageManager.PERMISSION_GRANTED){
                                     sendMessage(realAddress);
-                                }else{
+                                } else{
                                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest
                                             .permission.SEND_SMS}, PERMISSIONS_REQUEST_SMS_SEND);
-
                                 }
                             }
                         });
@@ -209,15 +212,7 @@ public class MainActivity extends AppCompatActivity {
      * SEND SOS
      *******************/
     public void sendMessage(String realAddress){
-//        String message = "I am in DANGER, please send help immediately! I am currently in " + realAddress;
-//
-//        String number = "09171103109";
-//
-//        SmsManager sms = SmsManager.getDefault();
-//        sms.sendTextMessage(number, null, message, null, null); //getNumber from contact list
-//        Toast.makeText(this, "SMS sent successfully", Toast.LENGTH_SHORT).show();
 
-        mAuth = FirebaseAuth.getInstance();
         DatabaseReference mReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         mReference.addValueEventListener(new ValueEventListener() {
@@ -233,7 +228,17 @@ public class MainActivity extends AppCompatActivity {
                     //message the nsend
                     String message = "HELP ME, " + name + "!! I am in DANGER, please send help immediately! I am currently in " + realAddress;
 
-                    sms.sendTextMessage(number, null, message, null, null); //getNumber from contact list
+                    //SEND TEXT MESSAGE DEPENDING ON MESSAGE LENGTH
+                    int length = message.length();
+                    if(length > 160) {
+                        ArrayList<String> messagelist = sms.divideMessage(message);
+                        sms.sendMultipartTextMessage(number, null, messagelist, null, null);
+                    } else {
+                        sms.sendTextMessage(number, null, message, null, null); //getNumber from contact list
+                    }
+
+
+
                 }
                 Toast.makeText(getApplicationContext(), "SMS sent successfully", Toast.LENGTH_SHORT).show();
             }
