@@ -5,6 +5,7 @@ import com.iacademy.tulongsulong.models.ContactsModel;
 import com.iacademy.tulongsulong.adapters.ContactsAdapter;
 import com.iacademy.tulongsulong.utils.RecyclerOnItemClickListener;
 import com.iacademy.tulongsulong.R;
+import com.iacademy.tulongsulong.activities.LoadScreenActivity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -246,13 +247,13 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
                                 //WRITE CONTACT TO FILE
                                 ContactsModel.writeToFile(name, email, number, getApplicationContext(), mReference, mAuth, storageRef, ivAvatar);
                                 //show popup
-                                Toast.makeText(getApplicationContext(), "Successfully added new contact.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Successfully added new contact. Please wait for refresh.", Toast.LENGTH_SHORT).show();
                             }
 
                             //close dialog
                             addContactDialog.dismiss();
                             finish();
-                            startActivity(new Intent(ContactsActivity.this, MainActivity.class));
+                            startActivity(new Intent(ContactsActivity.this, LoadScreenActivity.class));
                         }
                     }
                 });
@@ -323,8 +324,9 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
             public void onClick(View view) {
                 number = et_number.getText().toString();
                 ContactsModel.deleteFromFile(number, getApplicationContext(), mReference, mAuth, storageRef, ivAvatar, position, listModels);
+                Toast.makeText(getApplicationContext(), "Successfully deleted contact. Please wait for refresh.", Toast.LENGTH_SHORT).show();
                 editContactDialog.dismiss();
-                startActivity(new Intent(ContactsActivity.this, MainActivity.class));
+                startActivity(new Intent(ContactsActivity.this, LoadScreenActivity.class));
                 finish();
             }
         });
@@ -367,12 +369,12 @@ public class ContactsActivity extends AppCompatActivity implements RecyclerOnIte
                 if (email.endsWith("@gmail.com") && number.matches("^[0-9]{11}$") && name.matches("^([^0-9]*)$")) {
 
                     //show popup
-                    Toast.makeText(getApplicationContext(), "Successfully edited contact. Returning to home for refresh.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Successfully edited contact. Please wait for refresh.", Toast.LENGTH_SHORT).show();
 
                     //write to file
                     ContactsModel.editFile(name, email, number, getApplicationContext(), mReference, mAuth, storageRef, ivAvatar, position, listModels);
                     editContactDialog.dismiss();
-                    startActivity(new Intent(ContactsActivity.this, MainActivity.class));
+                    startActivity(new Intent(ContactsActivity.this, LoadScreenActivity.class));
                     finish();
                 }
             }

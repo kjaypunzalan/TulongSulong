@@ -3,16 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.iacademy.tulongsulong">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-
 
     <application
         android:allowBackup="true"
@@ -24,8 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TulongSulong"
         tools:targetApi="31">
-
-        <!-- SPLASH SCREEN START-UP ACTIVITY-->
+        <activity
+            android:name=".activities.LoadScreenActivity"
+            android:exported="false" />
+        <!-- SPLASH SCREEN START-UP ACTIVITY -->
         <activity
             android:name=".activities.SplashScreenActivity"
             android:exported="true">
@@ -34,17 +34,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- ACTIVITIES-->
+        </activity> <!-- ACTIVITIES -->
         <activity
             android:name=".activities.MainActivity"
             android:exported="false" />
         <activity
             android:name=".activities.ContactsActivity"
-            android:exported="false" />
-
-        <!-- LOGIN AND REGISTER-->
+            android:exported="false" /> <!-- LOGIN AND REGISTER -->
         <activity
             android:name=".activities.RegisterActivity"
             android:exported="false">
@@ -59,7 +55,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
     </application>
 
 </manifest>
